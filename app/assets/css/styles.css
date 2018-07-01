@@ -7,3 +7,9 @@ body {
     margin: 0 auto;
     max-width: 1200px;
 }
+
+.ss-gen__preview-code textarea {
+    width: 100%;
+    min-height: 100px;
+    resize: none;
+}
