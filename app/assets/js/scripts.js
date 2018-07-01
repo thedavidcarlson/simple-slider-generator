@@ -1,16 +1,28 @@
 // Style Object Converter
-var converStyleObj = function( styleObj ) {
+var convertStyleObj = function( styleObj, keyframeStyles ) {
     var styleStr = '',
         styleClassName = styleObj.name;
 
-        styleStr += '.' + styleClassName;
+        styleStr += styleClassName;
 
         styleStr += '{';
 
         let tempStyles = styleObj.styles;
 
-        for( let styleProp in tempStyles ) {
-            styleStr += styleProp + ':' + tempStyles[ styleProp ] + ';';
+        for( let styleKey in tempStyles ) {
+            if( keyframeStyles ) {
+                let animationProp = tempStyles[ styleKey ];
+
+                styleStr += styleKey + '{';
+
+                for( let animationKey in animationProp ) {
+                    styleStr += animationKey + ':' + animationProp[ animationKey ] + ';';
+                }
+
+                styleStr += '}';
+            } else {
+                styleStr += styleKey + ':' + tempStyles[ styleKey ] + ';';
+            }
         }
 
         styleStr += '}';
@@ -18,16 +30,15 @@ var converStyleObj = function( styleObj ) {
         return styleStr;
 };
 
-var testStyles = {
-    name: 'simple-slider',
-    styles: {
-        width: '100%',
-        height: '500px',
-        position: 'relative',
-        overflow: 'hidden'
-    } 
-};
+var previewTextarea = document.querySelector( '.ss-gen__preview-code textarea' ),
+    styleStr = '';
 
-var previewTextarea = document.querySelector( '.ss-gen__preview-code textarea' );
-debugger;
-previewTextarea.innerText = converStyleObj(testStyles);
+defaultStyles.forEach( function( el ) {
+    styleStr += convertStyleObj( el );
+} );
+
+animationStyles.forEach( function( el ) {
+    styleStr += convertStyleObj( el, true /*Keyframe Styles*/ );
+} );
+
+previewTextarea.innerText = styleStr;
