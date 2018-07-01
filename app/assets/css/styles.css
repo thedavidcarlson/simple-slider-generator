@@ -1,0 +1,9 @@
+body {
+	color: #333;
+}
+
+.ss-gen__container {
+    padding: 30px;
+    margin: 0 auto;
+    max-width: 1200px;
+}
