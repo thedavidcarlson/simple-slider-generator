@@ -30,6 +30,22 @@ var convertStyleObj = function( styleObj, keyframeStyles ) {
         return styleStr;
 };
 
+var createSlideShowMarkup = function( numSlides ) {
+    var docFrag = document.createDocumentFragment();
+
+    for( var i = 0; i < numSlides; i++ ) {
+        let sliderContainer = document.createElement( 'div' );
+
+        sliderContainer.className = 'simple-slider__slide';
+
+        docFrag.appendChild( sliderContainer );
+    }
+
+    document.querySelector( '.ss-gen__preview-slider' ).appendChild( docFrag );
+
+    return docFrag.innerHtml;
+};
+
 var previewTextarea = document.querySelector( '.ss-gen__preview-code textarea' ),
     styleStr = '';
 
