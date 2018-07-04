@@ -6,26 +6,31 @@ let previewTextarea = document.querySelector( '.ss-gen__preview-code textarea' )
  * @function: Takes in an object that defines styles and converts it to CSS. Object can be standard CSS or a keyframe object.
  */
 let convertStyleObj = function( styleObj, keyframeStyles ) {
-    let styleStr = '',
-        styleClassName = styleObj.name;
+    let styleStr = '';
 
-        styleStr += styleClassName;
+        // Start the CSS rule set off with the selector
+        styleStr += styleObj.name;
 
+        // Open the declaration block
         styleStr += '{';
 
         let tempStyles = styleObj.styles;
 
+        // Loop over the styles, adding each declaration
         for( let styleKey in tempStyles ) {
+            // If keyframe flag is passed, generate the declaration accordingly (using the nested syntax)
             if( keyframeStyles ) {
                 let animationProp = tempStyles[ styleKey ];
 
                 styleStr += styleKey + '{';
 
+                // Loop over the animation style declarations, appending each
                 for( let animationKey in animationProp ) {
                     styleStr += animationKey + ':' + animationProp[ animationKey ] + ';';
                 }
 
                 styleStr += '}';
+            // Else the object represents standard CSS, so generate a standard declaration
             } else {
                 styleStr += styleKey + ':' + tempStyles[ styleKey ] + ';';
             }
@@ -66,13 +71,16 @@ let addSlides = function( slideArr ) {
 
 };
 
-
+/*
+ * @function: Function that generates the controls based on the number of slides. The first control is always set to active.
+ */
 let addControls = function( controlCount ) {
     let controlWrapper = document.createElement( 'ul' );
 
     for( let i = 0; i < controlCount; i++ ) {
         let control = document.createElement( 'li' );
 
+        // If first control, make it active by appending the "control--on" div.
         if( i === 0 ) {
             let controlOn = document.createElement( 'div' );
             controlOn.className = 'simple-slider__control--on';
@@ -82,6 +90,7 @@ let addControls = function( controlCount ) {
         controlWrapper.appendChild( control );
     }
 
+    // Append the controls to the control container
     document.querySelector( '.simple-slider__control' ).appendChild( controlWrapper );
 };
 
