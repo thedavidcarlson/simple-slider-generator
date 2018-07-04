@@ -1,7 +1,5 @@
 // Global vars
 let previewTextarea = document.querySelector( '.ss-gen__preview-code textarea' ),
-    previewSection = document.querySelector( '.ss-gen__preview-slider' ),
-    previewStyle = document.querySelector( '.ss-gen__preview-styles' ),
     styleStr = '';
 
 // Style Object Converter
@@ -36,13 +34,12 @@ let convertStyleObj = function( styleObj, keyframeStyles ) {
         return styleStr;
 };
 
-let createSlideMarkup = function( slideArr, slideContainer ) {
+let addSlides = function( slideArr ) {
     let slideMarkup = '<div class="simple-slider__slide"><div class="simple-slider__text-bg-triangle"></div><div class="simple-slider__content"><div class="simple-slider__text"><h1></h1><p></p></div></div><div class="simple-slider__image"><img/></div></div>',
         docFrag = document.createDocumentFragment();
 
-    for( let i = 0, l = slideArr.length; i < l; i++ ) {
-        let tempTemplate = document.createElement( 'template' ),
-            slideObj = slideArr[ i ];
+    slideArr.forEach( function( slideObj ) {
+        let tempTemplate = document.createElement( 'template' );
 
         tempTemplate.innerHTML = slideMarkup;
 
@@ -52,11 +49,30 @@ let createSlideMarkup = function( slideArr, slideContainer ) {
         tempTemplate.content.querySelector( 'img' ).setAttribute( 'src', slideObj.imgLink );
 
         docFrag.appendChild( tempTemplate.content.firstChild );
+    } );
+
+    document.querySelector( '.simple-slider__slides' ).appendChild( docFrag );
+
+    addControls( slideArr.length );
+
+};
+
+let addControls = function( controlCount ) {
+    let controlWrapper = document.createElement( 'ul' );
+
+    for( let i = 0; i < controlCount; i++ ) {
+        let control = document.createElement( 'li' );
+
+        if( i === 0 ) {
+            let controlOn = document.createElement( 'div' );
+            controlOn.className = 'simple-slider__control--on';
+            control.appendChild( controlOn );
+        }
+
+        controlWrapper.appendChild( control );
     }
 
-    slideContainer.appendChild( docFrag );
-
-    return docFrag.innerHTML;
+    document.querySelector( '.simple-slider__control' ).appendChild( controlWrapper );
 };
 
 defaultStyles.forEach( function( el ) {
@@ -67,7 +83,8 @@ animationStyles.forEach( function( el ) {
     styleStr += convertStyleObj( el, true /*Keyframe Styles*/ );
 } );
 
-previewStyle.innerHTML = styleStr;
+// Set preview styles
+document.querySelector( '.ss-gen__preview-styles' ).innerHTML = styleStr;
 
 let slideObjs = [ 
     {
@@ -92,19 +109,10 @@ let slideObjs = [
     }
 ];
 
-let outerSlideTemplate = document.createElement( 'template' ),
-    controlTemplate = document.createElement( 'template' );
+addSlides( slideObjs );
 
-outerSlideTemplate.innerHTML = '<div class="simple-slider"><div class="simple-slider__slides"></div></div>';
-controlTemplate.innerHTML = '<div class="simple-slider__control"><ul><li><div class="simple-slider__control--on"></div></li><li></li><li></li><li></li></ul></div>';
-
-let slideWrapper = outerSlideTemplate.content.querySelector( '.simple-slider__slides' );
-
-createSlideMarkup( slideObjs, slideWrapper );
-
-slideWrapper.appendChild( controlTemplate.content.firstChild );
-
-previewSection.appendChild( outerSlideTemplate.content.firstChild );
-
-previewTextarea.innerText = '<style type="text/css">' + styleStr + '</style>' + previewSection.innerHTML;
+previewTextarea.innerText = '<style type="text/css">' 
+                            + styleStr 
+                            + '</style>' 
+                            + document.querySelector( '.ss-gen__preview-slider' ).innerHTML.trim();
 
