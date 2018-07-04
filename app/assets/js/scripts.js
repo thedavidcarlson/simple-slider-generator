@@ -2,7 +2,9 @@
 let previewTextarea = document.querySelector( '.ss-gen__preview-code textarea' ),
     styleStr = '';
 
-// Style Object Converter
+/*
+ * @function: Takes in an object that defines styles and converts it to CSS. Object can be standard CSS or a keyframe object.
+ */
 let convertStyleObj = function( styleObj, keyframeStyles ) {
     let styleStr = '',
         styleClassName = styleObj.name;
@@ -34,28 +36,36 @@ let convertStyleObj = function( styleObj, keyframeStyles ) {
         return styleStr;
 };
 
+/*
+ * @function: Function that takes in an array of objects that describe a set of slides, generating the slide markup from them and appending it to the DOM.
+ */
 let addSlides = function( slideArr ) {
     let slideMarkup = '<div class="simple-slider__slide"><div class="simple-slider__text-bg-triangle"></div><div class="simple-slider__content"><div class="simple-slider__text"><h1></h1><p></p></div></div><div class="simple-slider__image"><img/></div></div>',
         docFrag = document.createDocumentFragment();
 
+    // Loop over each slide object in the array
     slideArr.forEach( function( slideObj ) {
         let tempTemplate = document.createElement( 'template' );
 
         tempTemplate.innerHTML = slideMarkup;
 
+        // Set the content of the slide
         tempTemplate.content.querySelector( 'h1' ).innerText = slideObj.headerText;
         tempTemplate.content.querySelector( 'p' ).innerText = slideObj.bodyText;
-
         tempTemplate.content.querySelector( 'img' ).setAttribute( 'src', slideObj.imgLink );
 
+        // Append the slide to the document fragment
         docFrag.appendChild( tempTemplate.content.firstChild );
     } );
 
+    // Append the slide markup for the slider
     document.querySelector( '.simple-slider__slides' ).appendChild( docFrag );
 
+    // Create the controls for the slider
     addControls( slideArr.length );
 
 };
+
 
 let addControls = function( controlCount ) {
     let controlWrapper = document.createElement( 'ul' );
@@ -75,10 +85,12 @@ let addControls = function( controlCount ) {
     document.querySelector( '.simple-slider__control' ).appendChild( controlWrapper );
 };
 
+// Generate the standard styles using an arry of style objects defined before this file.
 defaultStyles.forEach( function( el ) {
     styleStr += convertStyleObj( el );
 } );
 
+// Generate the animation styles that use the keyframe syntax using an array of style objects defined before this file.
 animationStyles.forEach( function( el ) {
     styleStr += convertStyleObj( el, true /*Keyframe Styles*/ );
 } );
@@ -86,6 +98,7 @@ animationStyles.forEach( function( el ) {
 // Set preview styles
 document.querySelector( '.ss-gen__preview-styles' ).innerHTML = styleStr;
 
+// Dummy data representing the slides
 let slideObjs = [ 
     {
         'headerText': 'Some header text',
@@ -109,8 +122,10 @@ let slideObjs = [
     }
 ];
 
+// Generate and append the slides
 addSlides( slideObjs );
 
+// Add the styles and markup to the textarea
 previewTextarea.innerText = '<style type="text/css">' 
                             + styleStr 
                             + '</style>' 
