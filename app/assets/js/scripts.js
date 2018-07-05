@@ -5,38 +5,42 @@ let previewTextarea = document.querySelector( '.ss-gen__preview-code textarea' )
 /*
  * @function: Takes in an object that defines styles and converts it to CSS. Object can be standard CSS or a keyframe object.
  */
-let convertStyleObj = function( styleObj, keyframeStyles ) {
+let convertCssObj = function( cssObj, keyframeStyles ) {
     let styleStr = '';
 
-        // Start the CSS rule set off with the selector
-        styleStr += styleObj.name;
+        for( let selector in cssObj ) {
 
-        // Open the declaration block
-        styleStr += '{';
+            // Start the CSS rule set off with the selector (~class-name or @keyframes name)
+            styleStr += ( keyframeStyles ) ? selector : '.' + selector.substr( 1 );
 
-        let tempStyles = styleObj.styles;
+            // Open the declaration block
+            styleStr += '{';
 
-        // Loop over the styles, adding each declaration
-        for( let styleKey in tempStyles ) {
-            // If keyframe flag is passed, generate the declaration accordingly (using the nested syntax)
-            if( keyframeStyles ) {
-                let animationProp = tempStyles[ styleKey ];
+            let styleObj = cssObj[ selector ];
 
-                styleStr += styleKey + '{';
+            // Loop over the styles, adding each declaration
+            for( let styleKey in styleObj ) {
+                // If keyframe flag is passed, generate the declaration accordingly (using the nested syntax)
+                if( keyframeStyles ) {
+                    let animationProp = styleObj[ styleKey ];
 
-                // Loop over the animation style declarations, appending each
-                for( let animationKey in animationProp ) {
-                    styleStr += animationKey + ':' + animationProp[ animationKey ] + ';';
+                    styleStr += styleKey + '{';
+
+                    // Loop over the animation style declarations, appending each
+                    for( let animationKey in animationProp ) {
+                        styleStr += animationKey + ':' + animationProp[ animationKey ] + ';';
+                    }
+
+                    styleStr += '}';
+                // Else the object represents standard CSS, so generate a standard declaration
+                } else {
+                    styleStr += styleKey + ':' + styleObj[ styleKey ] + ';';
                 }
-
-                styleStr += '}';
-            // Else the object represents standard CSS, so generate a standard declaration
-            } else {
-                styleStr += styleKey + ':' + tempStyles[ styleKey ] + ';';
             }
-        }
 
-        styleStr += '}';
+            styleStr += '}';
+
+        }
 
         return styleStr;
 };
@@ -94,15 +98,11 @@ let addControls = function( controlCount ) {
     document.querySelector( '.simple-slider__control' ).appendChild( controlWrapper );
 };
 
-// Generate the standard styles using an arry of style objects defined before this file.
-defaultStyles.forEach( function( el ) {
-    styleStr += convertStyleObj( el );
-} );
+// Generate the standard styles using an object that represents CSS with class names as properties defined before this file.
+styleStr += convertCssObj( defaultStyles );
 
-// Generate the animation styles that use the keyframe syntax using an array of style objects defined before this file.
-animationStyles.forEach( function( el ) {
-    styleStr += convertStyleObj( el, true /*Keyframe Styles*/ );
-} );
+// Generate the animation styles using an object that represents CSS with animation names as properties defined before this file.
+styleStr += convertCssObj( animationStyles, true /*Keyframe Styles*/ );
 
 // Set preview styles
 document.querySelector( '.ss-gen__preview-styles' ).innerHTML = styleStr;
