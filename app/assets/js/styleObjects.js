@@ -144,7 +144,113 @@ var defaultStyles = [
         '-moz-animation': 'control-animation 30s infinite',
         animation: 'control-animation 30s infinite'
     }
-}];
+}
+];
+
+// @TODO: Swap style generation to be done via object
+// var defaultStyles = {
+//     '~simple-slider': {
+//         width: '100%',
+//         height: '500px',
+//         position: 'relative',
+//         overflow: 'hidden'
+//     },
+//     '~simple-slider__slides': {
+//         width: '400%',
+//         height: '100%',
+//         position: 'relative',
+//         '-webkit-animation': 'slide-animation 30s infinite',
+//         '-moz-animation': 'slide-animation 30s infinite',
+//         animation: 'slide-animation 30s infinite'
+//     },
+//     '~simple-slider__slide': {
+//         width: '25%',
+//         height: '100%',
+//         float: 'left',
+//         position: 'relative',
+//         'z-index': '1',
+//         overflow: 'hidden'
+//     },
+//     '~simple-slider__image': {
+//         width: '100%',
+//         height: '100%'
+//     },
+//     '~simple-slider__image img': {
+//         width: '100%',
+//         height: '100%'
+//     },
+//     '~simple-slider__text-bg-triangle': {
+//         border: '500px solid transparent',
+//         'border-left': '800px solid rgba(50, 50, 50, .7)',
+//         'border-bottom': '0',
+//         position: 'absolute',
+//         bottom: '0'
+//     },
+//     '~simple-slider__content': {
+//         width: '100%',
+//         height: '100%',
+//         position: 'absolute',
+//         overflow: 'hidden'
+//     },
+//     '~simple-slider__text': {
+//         width: '500px',
+//         height: '150px',
+//         float: 'left',
+//         position: 'relative',
+//         top: '300px',
+//         'padding-left': '30px',
+//         'box-sizing': 'border-box',
+//         'font-family': 'Tahoma, Geneva, sans-serif',
+//         color: '#fff',
+//         '-webkit-animation': 'text-animation 7.5s infinite',
+//         '-moz-animation': 'text-animation 7.5s infinite',
+//         animation: 'text-animation 7.5s infinite'
+//     },
+//     '~simple-slider__text h1': {
+//         'text-transform': 'uppercase',
+//         'font-size': '28px',
+//         color: '#fff',
+//         'padding-bottom': '10px'
+//     },
+//     '~simple-slider__text p': {
+//         'font-weight': 'normal',
+//         'font-size': '16px',
+//         'font-style': 'italic'
+//     },
+//     '~simple-slider__control': {
+//         width: '120px',
+//         height: '10px',
+//         position: 'absolute',
+//         bottom: '50px',
+//         'z-index': '99',
+//         left: '30px'
+//     },
+//     '~simple-slider__control > ul': {
+//         'list-style': 'none'
+//     },
+//     '~simple-slider__control > ul > li': {
+//         width: '10px',
+//         height: '10px',
+//         'border-radius': '50%',
+//         background: '#111',
+//         float: 'left',
+//         'margin-right': '5px',
+//         cursor: 'pointer'
+//     },
+//     '~simple-slider__control ul': {
+//         overflow: 'hidden'
+//     },
+//     '~simple-slider__control--on': {
+//         width: '100%',
+//         height: '100%',
+//         'border-radius': '50%',
+//         background: '#fff',
+//         position: 'relative',
+//         '-webkit-animation': 'control-animation 30s infinite',
+//         '-moz-animation': 'control-animation 30s infinite',
+//         animation: 'control-animation 30s infinite'
+//     }
+// };
 
 var animationStyles = [{
     name: '@keyframes load',
