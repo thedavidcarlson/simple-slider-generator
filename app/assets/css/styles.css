@@ -8,6 +8,10 @@ body {
     max-width: 1200px;
 }
 
+.ss-gen__controls {
+    margin-bottom: 20px; 
+}
+
 .ss-gen__preview-code textarea {
     width: 100%;
     min-height: 100px;
