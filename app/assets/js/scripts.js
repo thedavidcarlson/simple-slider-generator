@@ -88,12 +88,24 @@ let addSlides = function( slideArr ) {
         docFrag.appendChild( tempTemplate.content.firstChild );
     } );
 
-    // Append the slide markup for the slider
-    document.querySelector( '.simple-slider__slides' ).appendChild( docFrag );
-
     // Create the controls for the slider
-    addControls( slideArr.length );
+    var controls = document.createElement( 'div' );
 
+    controls.className = 'simple-slider__control';
+    controls.appendChild( addControls( slideArr.length ) );
+
+    // Append the slide markup for the slider
+    var slides = document.createElement( 'div' );
+
+    slides.className = 'simple-slider__slides';
+    slides.appendChild( docFrag );
+
+    var tempContainer = document.createElement( 'div' );
+
+    tempContainer.appendChild( slides );
+    tempContainer.appendChild( controls );
+
+    document.querySelector( '.simple-slider' ).innerHTML = tempContainer.innerHTML;
 };
 
 /*
@@ -116,7 +128,7 @@ let addControls = function( controlCount ) {
     }
 
     // Append the controls to the control container
-    document.querySelector( '.simple-slider__control' ).appendChild( controlWrapper );
+    return controlWrapper;
 };
 
 let generateSlider = function() {
@@ -142,35 +154,75 @@ let generateSlider = function() {
                                 + document.querySelector( '.ss-gen__preview-slider' ).innerHTML.trim();
 };
 
-let createAnimationDefinition = function( numSlides, animationName, propertyName ) {
-    // let animationObj = {
-    //     '0%': {
-    //         'margin-left': '0'
-    //     }
-    // };
+let createAnimationDefinition = function( numSlides, isSlide, propertyName ) {
+    let percentIncrement = 100 / numSlides,
+        animationOffset = 4,
+        controlIncrement = 15,
+        animationObj = { '0%': {} };
 
-    // for( let i = 0; i < numSlides; i++ ) {
+    animationObj[ '0%' ][ propertyName ] = '0';
 
-    // }
+    for( let i = 1; i < numSlides; i++ ) {
+        let currentPercent = ( i * percentIncrement ),
+            transitionPercent = ( currentPercent - animationOffset ) + '%';
+
+        currentPercent += '%';
+
+        animationObj[ transitionPercent ] = {};
+        if( i === 1 ) {
+            animationObj[ transitionPercent ][ propertyName ] = '0';
+        } else {
+            if( isSlide ) {
+                animationObj[ transitionPercent ][ propertyName ] = '-' + ( 100 * ( i - 1 ) ) + '%';
+            } else {
+                animationObj[ transitionPercent ][ propertyName ] = ( controlIncrement * ( i - 1 ) ) + 'px';
+            }
+        }
+        
+        animationObj[ currentPercent ] = {};
+        if( isSlide ) {
+            animationObj[ currentPercent ][ propertyName ] = '-' + ( 100 * i ) + '%';
+        } else {
+            animationObj[ currentPercent ][ propertyName ] = ( controlIncrement * i ) + 'px';
+        }
+    }
+
+    animationObj[ ( 100 - animationOffset ) + '%' ] = {};
+    if( isSlide ) {
+        animationObj[ ( 100 - animationOffset ) + '%' ][ propertyName ] = '-' + ( 100 * ( numSlides - 1 ) ) + '%';
+    } else {
+        animationObj[ ( 100 - animationOffset ) + '%' ][ propertyName ] = ( controlIncrement * ( numSlides - 1 ) ) + 'px';
+    }
+
+    animationObj[ '100%' ] = {};
+    animationObj[ '100%' ][ propertyName ] = '0';
+
+    return animationObj;
 };
 
 // Event Bindings
-// document.querySelector( '.ss-gen__add-slide-control' ).onClick = function( ev ) {
-//     if( slideObjs.length < 10 ) {
-//         slideObjs.push( {
-//             'headerText': 'Some header text',
-//             'bodyText': 'This is a short description of nothing. This text really has no purpose other than to occupy space. This space must be occupied to showcase the slider.',
-//             'imgLink': 'https://cdn.pixabay.com/photo/2018/05/13/21/55/water-3398111_1280.jpg'
-//         } );
+document.querySelector( '.ss-gen__add-slide-control' ).addEventListener( 'click', function( ev ) {
+    if( slideObjs.length < 10 ) {
+        slideObjs.push( {
+            'headerText': 'Some header text',
+            'bodyText': 'This is a short description of nothing. This text really has no purpose other than to occupy space. This space must be occupied to showcase the slider.',
+            'imgLink': 'https://cdn.pixabay.com/photo/2018/05/13/21/55/water-3398111_1280.jpg'
+        } );
 
-//         let numSlides = slideObjs.length;
+        let numSlides = slideObjs.length;
 
-//         defaultStyles[ '~simple-slider__slides' ].width = ( numSlides * 100 ) + '%';
-//         defaultStyles[ '~simple-slider__slide' ].width = ( 100 / numSlides ) + '%';
-//         defaultStyles[ '~simple-slider__text' ].animation = 'text-animation ' + ( 30 / numSlides )  + 's infinite';
-//     } else {
-//         console.log( 'Can\'t add more than 10 slides' );
-//     }
-// };
+        defaultStyles[ '~simple-slider__slides' ].width = ( numSlides * 100 ) + '%';
+        defaultStyles[ '~simple-slider__slide' ].width = ( 100 / numSlides ) + '%';
+        defaultStyles[ '~simple-slider__text' ].animation = 'text-animation ' + ( 30 / numSlides )  + 's infinite';
+        defaultStyles[ '~simple-slider__control' ].width = ( 40 + 15 * numSlides ) + 'px';
+
+        animationStyles[ '@keyframes slide-animation' ] = createAnimationDefinition( numSlides, true, 'margin-left' );
+        animationStyles[ '@keyframes control-animation' ] = createAnimationDefinition( numSlides, false, 'margin-left' );
+
+        generateSlider();
+    } else {
+        console.log( 'Can\'t add more than 10 slides' );
+    }
+} );
 
 generateSlider();
