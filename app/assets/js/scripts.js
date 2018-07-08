@@ -21,7 +21,9 @@ let slideObjs = [
             'bodyText': 'This is a short description of nothing. This text really has no purpose other than to occupy space. This space must be occupied to showcase the slider.',
             'imgLink': 'https://cdn.pixabay.com/photo/2018/05/13/21/55/water-3398111_1280.jpg'
         }
-    ];
+    ],
+    timePerSlide = 7,
+    slideAnimationLength = 1.5;
 
 /*
  * @function: Takes in an object that defines styles and converts it to CSS. Object can be standard CSS or a keyframe object.
@@ -135,6 +137,8 @@ let generateSlider = function() {
     let previewTextarea = document.querySelector( '.ss-gen__preview-code textarea' ),
         styleStr = '';
 
+    setDynamicStyleValues();
+
     // Generate the standard styles using an object that represents CSS with class names as properties defined before this file.
     styleStr += convertCssObj( defaultStyles );
 
@@ -154,9 +158,33 @@ let generateSlider = function() {
                                 + document.querySelector( '.ss-gen__preview-slider' ).innerHTML.trim();
 };
 
+let setDynamicStyleValues = function() {
+    let numSlides = slideObjs.length;
+
+    setAnimationLength( numSlides );
+
+    // Set slide widths based on # of slides
+    defaultStyles[ '~simple-slider__slides' ].width = ( numSlides * 100 ) + '%';
+    defaultStyles[ '~simple-slider__slide' ].width = ( 100 / numSlides ) + '%';
+
+    // Set control width based on # of controls
+    defaultStyles[ '~simple-slider__control' ].width = ( 40 + 15 * numSlides ) + 'px';
+
+    animationStyles[ '@keyframes slide-animation' ] = createAnimationDefinition( numSlides, true, 'margin-left' );
+    animationStyles[ '@keyframes control-animation' ] = createAnimationDefinition( numSlides, false, 'margin-left' );
+};
+
+let setAnimationLength = function( numSlides ) {
+    defaultStyles[ '~simple-slider__slides' ].animation = 'slide-animation ' + ( timePerSlide * numSlides )  + 's infinite';
+    defaultStyles[ '~simple-slider__control--on' ].animation = 'control-animation ' + ( timePerSlide * numSlides )  + 's infinite';
+};
+
 let createAnimationDefinition = function( numSlides, isSlide, propertyName ) {
     let percentIncrement = 100 / numSlides,
-        animationOffset = 4,
+        // This is a doozy. This percent of the total slide animation time that one slide animation is supposed to take.
+        // So for example, if there are 4 slides where each is active for 7 seconds, then the total slide animation time
+        // is 28 seconds. If we have a slide animation length of 1 second, then the animation should take (1/28) * 100 ~ 3.57%
+        animationOffset = ( slideAnimationLength / ( timePerSlide * numSlides ) ) * 100,
         controlIncrement = 15,
         animationObj = { '0%': {} };
 
@@ -208,16 +236,6 @@ document.querySelector( '.ss-gen__add-slide-control' ).addEventListener( 'click'
             'bodyText': 'This is a short description of nothing. This text really has no purpose other than to occupy space. This space must be occupied to showcase the slider.',
             'imgLink': 'https://cdn.pixabay.com/photo/2018/05/13/21/55/water-3398111_1280.jpg'
         } );
-
-        let numSlides = slideObjs.length;
-
-        defaultStyles[ '~simple-slider__slides' ].width = ( numSlides * 100 ) + '%';
-        defaultStyles[ '~simple-slider__slide' ].width = ( 100 / numSlides ) + '%';
-        defaultStyles[ '~simple-slider__text' ].animation = 'text-animation ' + ( 30 / numSlides )  + 's infinite';
-        defaultStyles[ '~simple-slider__control' ].width = ( 40 + 15 * numSlides ) + 'px';
-
-        animationStyles[ '@keyframes slide-animation' ] = createAnimationDefinition( numSlides, true, 'margin-left' );
-        animationStyles[ '@keyframes control-animation' ] = createAnimationDefinition( numSlides, false, 'margin-left' );
 
         generateSlider();
     } else {

@@ -12,7 +12,7 @@ var defaultStyles = {
         position: 'relative',
         /*'-webkit-animation': 'slide-animation 30s infinite',
         '-moz-animation': 'slide-animation 30s infinite',*/
-        animation: 'slide-animation 30s infinite'
+        animation: 'slide-animation 28s infinite'
     },
     '~simple-slider__slide': {
         /* 100 / n */
@@ -57,7 +57,7 @@ var defaultStyles = {
         /* animation length / n */
         /*'-webkit-animation': 'text-animation 7.5s infinite',
         '-moz-animation': 'text-animation 7.5s infinite',*/
-        animation: 'text-animation 7.5s infinite'
+        animation: 'text-animation 7s infinite'
     },
     '~simple-slider__text h1': {
         'text-transform': 'uppercase',
@@ -101,7 +101,7 @@ var defaultStyles = {
         position: 'relative',
         /*'-webkit-animation': 'control-animation 30s infinite',
         '-moz-animation': 'control-animation 30s infinite',*/
-        animation: 'control-animation 30s infinite'
+        animation: 'control-animation 28s infinite'
     }
 };
 
