@@ -13,13 +13,22 @@
                 <button class="ss-gen__add-slide-control">
                     Add Slide
                 </button>
+                <label for="total-slide-time">Total Time Per Slide</label>
+                <input type="number" name="total-slide-time" min="1" value="7" class="ss-gen__time-per-slide"/>
+                <label for="slide-animation-length">Slide Animation Length</label>
+                <input type="number" name="slide-animation-length" min="0" step=".1" value="1.5" class="ss-gen__animation-length--slide"/>
+                <label for="text-animation-length">Text Animation Length</label>
+                <input type="number" name="text-animation-length" min="0" step=".1" value=".7" class="ss-gen__animation-length--text"/>
+                <button class="ss-gen__generate-slideshow">
+                    Generate Slideshow
+                </button>
             </div>
             <div class="ss-gen__preview">
                 <div class="ss-gen__preview-code">
                     <textarea readonly></textarea>
                 </div>
                 <div class="ss-gen__preview-slider">
-                    <div class="simple-slider"><div class="simple-slider__slides"></div><div class="simple-slider__control"></div></div>
+                    <div class="simple-slider"></div>
                 </div>
             </div>
         </div>

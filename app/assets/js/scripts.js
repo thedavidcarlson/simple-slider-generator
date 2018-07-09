@@ -180,6 +180,7 @@ let setDynamicStyleValues = function() {
 let setAnimationLength = function( numSlides ) {
     defaultStyles[ '~simple-slider__slides' ].animation = 'slide-animation ' + ( timePerSlide * numSlides )  + 's infinite';
     defaultStyles[ '~simple-slider__control--on' ].animation = 'control-animation ' + ( timePerSlide * numSlides )  + 's infinite';
+    defaultStyles[ '~simple-slider__text' ].animation = 'text-animation ' + timePerSlide  + 's infinite';
 };
 
 let createAnimationDefinition = function( numSlides, isSlide, propertyName ) {
@@ -269,6 +270,13 @@ document.querySelector( '.ss-gen__add-slide-control' ).addEventListener( 'click'
     } else {
         console.log( 'Can\'t add more than 10 slides' );
     }
+} );
+
+document.querySelector( '.ss-gen__generate-slideshow' ).addEventListener( 'click', function( ev ) {
+    timePerSlide = +document.querySelector( '.ss-gen__time-per-slide' ).value,
+    slideAnimationLength = +document.querySelector( '.ss-gen__animation-length--slide' ).value,
+    textAnimationLength = +document.querySelector( '.ss-gen__animation-length--text' ).value,
+    generateSlider();
 } );
 
 generateSlider();
