@@ -23,7 +23,9 @@ let slideObjs = [
         }
     ],
     timePerSlide = 7,
-    slideAnimationLength = 1.5;
+    slideAnimationLength = 1.5,
+    textAnimationLength = .7,
+    textSlideAnimationDelay = .3;
 
 /*
  * @function: Takes in an object that defines styles and converts it to CSS. Object can be standard CSS or a keyframe object.
@@ -172,6 +174,7 @@ let setDynamicStyleValues = function() {
 
     animationStyles[ '@keyframes slide-animation' ] = createAnimationDefinition( numSlides, true, 'margin-left' );
     animationStyles[ '@keyframes control-animation' ] = createAnimationDefinition( numSlides, false, 'margin-left' );
+    animationStyles[ '@keyframes text-animation' ] = createTextAnimation();
 };
 
 let setAnimationLength = function( numSlides ) {
@@ -226,6 +229,31 @@ let createAnimationDefinition = function( numSlides, isSlide, propertyName ) {
     animationObj[ '100%' ][ propertyName ] = '0';
 
     return animationObj;
+};
+
+let createTextAnimation = function() {
+        // Percentage of the entire slide's time that the text animates. So if the text animates in .7 seconds and
+        // the time per slide is 7 seconds, then the text slide in animation must be complete at 10%
+    let textAnimationPercent = ( textAnimationLength / timePerSlide ) * 100,
+        // Percentage at which the text animation must end (where text is all the way off the screen) relative to the total slide time.
+        textAnimationEndPercent = ( ( timePerSlide - textSlideAnimationDelay - slideAnimationLength ) / timePerSlide ) * 100,
+        animationLeftValue = '-520px',
+        textAnimation = {
+            '0%, 100%': {}
+        };
+
+        textAnimation[ '0%, 100%' ].left = animationLeftValue;
+
+        textAnimation[ ( textAnimationPercent + '%' ) ] = {};
+        textAnimation[ ( textAnimationPercent + '%' ) ].left = '0';
+
+        textAnimation[ ( ( textAnimationEndPercent - textAnimationPercent ) + '%' ) ] = {};
+        textAnimation[ ( ( textAnimationEndPercent - textAnimationPercent ) + '%' ) ].left = '0';
+
+        textAnimation[ ( textAnimationEndPercent + '%' ) ] = {};
+        textAnimation[ ( textAnimationEndPercent + '%' ) ].left = animationLeftValue;
+
+    return textAnimation;
 };
 
 // Event Bindings

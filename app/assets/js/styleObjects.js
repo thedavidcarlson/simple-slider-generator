@@ -106,14 +106,6 @@ var defaultStyles = {
 };
 
 var animationStyles = {
-    '@keyframes load': {
-        'from': {
-            left: '-100%'
-        },
-        'to': {
-            left: '0'
-        }
-    },
     '@keyframes text-animation': {
         '0%': {
             left: '-520px'
