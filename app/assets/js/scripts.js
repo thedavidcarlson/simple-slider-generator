@@ -1,5 +1,5 @@
-// Global vars
-// Dummy data representing the slides
+// Global Variables
+    // Dummy data representing the slides
 let slideObjs = [ 
         {
             'headerText': 'Some header text',
@@ -30,7 +30,7 @@ let slideObjs = [
 /*
  * @function: Takes in an object that defines styles and converts it to CSS. Object can be standard CSS or a keyframe object.
  */
-let convertCssObj = function( cssObj, keyframeStyles ) {
+const convertCssObj = function( cssObj, keyframeStyles ) {
     let styleStr = '';
 
         for( let selector in cssObj ) {
@@ -73,9 +73,9 @@ let convertCssObj = function( cssObj, keyframeStyles ) {
 /*
  * @function: Function that takes in an array of objects that describe a set of slides, generating the slide markup from them and appending it to the DOM.
  */
-let addSlides = function( slideArr ) {
-    let slideMarkup = '<div class="simple-slider__slide"><div class="simple-slider__text-bg-triangle"></div><div class="simple-slider__content"><div class="simple-slider__text"><h1></h1><p></p></div></div><div class="simple-slider__image"><img/></div></div>',
-        docFrag = document.createDocumentFragment();
+const addSlides = function( slideArr ) {
+    const slideMarkup = '<div class="simple-slider__slide"><div class="simple-slider__text-bg-triangle"></div><div class="simple-slider__content"><div class="simple-slider__text"><h1></h1><p></p></div></div><div class="simple-slider__image"><img/></div></div>';
+    let docFrag = document.createDocumentFragment();
 
     // Loop over each slide object in the array
     slideArr.forEach( function( slideObj ) {
@@ -93,18 +93,18 @@ let addSlides = function( slideArr ) {
     } );
 
     // Create the controls for the slider
-    var controls = document.createElement( 'div' );
+    let controls = document.createElement( 'div' );
 
     controls.className = 'simple-slider__control';
     controls.appendChild( addControls( slideArr.length ) );
 
     // Append the slide markup for the slider
-    var slides = document.createElement( 'div' );
+    let slides = document.createElement( 'div' );
 
     slides.className = 'simple-slider__slides';
     slides.appendChild( docFrag );
 
-    var tempContainer = document.createElement( 'div' );
+    let tempContainer = document.createElement( 'div' );
 
     tempContainer.appendChild( slides );
     tempContainer.appendChild( controls );
@@ -115,7 +115,7 @@ let addSlides = function( slideArr ) {
 /*
  * @function: Function that generates the controls based on the number of slides. The first control is always set to active.
  */
-let addControls = function( controlCount ) {
+const addControls = function( controlCount ) {
     let controlWrapper = document.createElement( 'ul' );
 
     for( let i = 0; i < controlCount; i++ ) {
@@ -135,7 +135,7 @@ let addControls = function( controlCount ) {
     return controlWrapper;
 };
 
-let generateSlider = function() {
+const generateSlider = function() {
     let previewTextarea = document.querySelector( '.ss-gen__preview-code textarea' ),
         styleStr = '';
 
@@ -160,7 +160,7 @@ let generateSlider = function() {
                                 + document.querySelector( '.ss-gen__preview-slider' ).innerHTML.trim();
 };
 
-let setDynamicStyleValues = function() {
+const setDynamicStyleValues = function() {
     let numSlides = slideObjs.length;
 
     setAnimationLength( numSlides );
@@ -177,13 +177,13 @@ let setDynamicStyleValues = function() {
     animationStyles[ '@keyframes text-animation' ] = createTextAnimation();
 };
 
-let setAnimationLength = function( numSlides ) {
+const setAnimationLength = function( numSlides ) {
     defaultStyles[ '~simple-slider__slides' ].animation = 'slide-animation ' + ( timePerSlide * numSlides )  + 's infinite';
     defaultStyles[ '~simple-slider__control--on' ].animation = 'control-animation ' + ( timePerSlide * numSlides )  + 's infinite';
     defaultStyles[ '~simple-slider__text' ].animation = 'text-animation ' + timePerSlide  + 's infinite';
 };
 
-let createAnimationDefinition = function( numSlides, isSlide, propertyName ) {
+const createAnimationDefinition = function( numSlides, isSlide, propertyName ) {
     let percentIncrement = 100 / numSlides,
         // This is a doozy. This percent of the total slide animation time that one slide animation is supposed to take.
         // So for example, if there are 4 slides where each is active for 7 seconds, then the total slide animation time
@@ -273,9 +273,10 @@ document.querySelector( '.ss-gen__add-slide-control' ).addEventListener( 'click'
 } );
 
 document.querySelector( '.ss-gen__generate-slideshow' ).addEventListener( 'click', function( ev ) {
-    timePerSlide = +document.querySelector( '.ss-gen__time-per-slide' ).value,
-    slideAnimationLength = +document.querySelector( '.ss-gen__animation-length--slide' ).value,
-    textAnimationLength = +document.querySelector( '.ss-gen__animation-length--text' ).value,
+    timePerSlide = +document.querySelector( '.ss-gen__time-per-slide' ).value;
+    slideAnimationLength = +document.querySelector( '.ss-gen__animation-length--slide' ).value;
+    textAnimationLength = +document.querySelector( '.ss-gen__animation-length--text' ).value;
+    textSlideAnimationDelay = +document.querySelector( '.ss-gen__animation-delay' ).value;
     generateSlider();
 } );
 
