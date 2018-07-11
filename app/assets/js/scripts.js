@@ -273,10 +273,20 @@ document.querySelector( '.ss-gen__add-slide-control' ).addEventListener( 'click'
 } );
 
 document.querySelector( '.ss-gen__generate-slideshow' ).addEventListener( 'click', function( ev ) {
-    timePerSlide = +document.querySelector( '.ss-gen__time-per-slide' ).value;
-    slideAnimationLength = +document.querySelector( '.ss-gen__animation-length--slide' ).value;
-    textAnimationLength = +document.querySelector( '.ss-gen__animation-length--text' ).value;
-    textSlideAnimationDelay = +document.querySelector( '.ss-gen__animation-delay' ).value;
+    var timePerSlideVal = +document.querySelector( '.ss-gen__time-per-slide' ).value,
+        slideAnimationLengthVal = +document.querySelector( '.ss-gen__animation-length--slide' ).value,
+        textAnimationLengthVal = +document.querySelector( '.ss-gen__animation-length--text' ).value,
+        animationDelayVal = +document.querySelector( '.ss-gen__animation-delay' ).value;
+
+    if( timePerSlideVal <  ( slideAnimationLengthVal + 2 * textAnimationLengthVal + animationDelayVal ) ) {
+        alert( 'Time Per Slide cannot be less than slide animation + 2 x text animation + animation delay' );
+    } else {
+        timePerSlide = timePerSlideVal;
+        slideAnimationLength = slideAnimationLengthVal;
+        textAnimationLength = textAnimationLengthVal;
+        textSlideAnimationDelay = animationDelayVal;
+    }   
+
     generateSlider();
 } );
 
