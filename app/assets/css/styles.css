@@ -12,6 +12,12 @@ body {
     margin-bottom: 20px; 
 }
 
+.ss-gen__animation-note {
+    margin-top: 10px;
+    padding: 5px 10px;
+    border: 1px solid #000;
+}
+
 label {
     display: block;
     margin-top: 10px;
