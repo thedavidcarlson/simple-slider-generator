@@ -232,7 +232,7 @@ const createAnimationDefinition = function( numSlides, isSlide, propertyName ) {
     return animationObj;
 };
 
-let createTextAnimation = function() {
+const createTextAnimation = function() {
         // Percentage of the entire slide's time that the text animates. So if the text animates in .7 seconds and
         // the time per slide is 7 seconds, then the text slide in animation must be complete at 10%
     let textAnimationPercent = ( textAnimationLength / timePerSlide ) * 100,
@@ -257,6 +257,16 @@ let createTextAnimation = function() {
     return textAnimation;
 };
 
+const warningDialog = function( dialogText ) {
+    document.querySelector( '.ss-gen__warning-dialog-text' ).innerText = dialogText;
+
+    document.body.classList.add( 'show-warning-dialog' );
+};
+
+const closeWarningDialog = function() {
+    document.body.classList.remove( 'show-warning-dialog' );
+};
+
 // Event Bindings
 document.querySelector( '.ss-gen__add-slide-control' ).addEventListener( 'click', function( ev ) {
     if( slideObjs.length < 10 ) {
@@ -268,7 +278,7 @@ document.querySelector( '.ss-gen__add-slide-control' ).addEventListener( 'click'
 
         generateSlider();
     } else {
-        console.log( 'Can\'t add more than 10 slides' );
+        warningDialog( 'Can\'t add more than 10 slides' );
     }
 } );
 
@@ -279,7 +289,7 @@ document.querySelector( '.ss-gen__generate-slideshow' ).addEventListener( 'click
         animationDelayVal = +document.querySelector( '.ss-gen__animation-delay' ).value;
 
     if( timePerSlideVal <  ( slideAnimationLengthVal + 2 * textAnimationLengthVal + animationDelayVal ) ) {
-        alert( 'Time Per Slide cannot be less than slide animation + 2 x text animation + animation delay' );
+        warningDialog( 'Time Per Slide cannot be less than slide animation + 2 x text animation + animation delay' );
     } else {
         timePerSlide = timePerSlideVal;
         slideAnimationLength = slideAnimationLengthVal;
@@ -289,5 +299,8 @@ document.querySelector( '.ss-gen__generate-slideshow' ).addEventListener( 'click
 
     generateSlider();
 } );
+
+document.querySelector( '.ss-gen__warning-dialog-overlay' ).addEventListener( 'click', closeWarningDialog );
+document.querySelector( '.ss-gen__warning-dialog-button' ).addEventListener( 'click', closeWarningDialog );
 
 generateSlider();
