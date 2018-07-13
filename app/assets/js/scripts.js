@@ -22,9 +22,13 @@ let slideObjs = [
             'imgLink': 'https://cdn.pixabay.com/photo/2018/05/13/21/55/water-3398111_1280.jpg'
         }
     ],
+    // This is the amount of time (in seconds) the slide is on the screen, including the time it takes to animate to a new slide
     timePerSlide = 7,
+    // This is the amount of time (in seconds) it takes to animate to a new slide
     slideAnimationLength = 1.5,
+    // This is the amount of time (in seconds) it takes to animate the text in or out
     textAnimationLength = .7,
+    // This is the delay (in seconds) between the text animation out and the slide animation 
     textSlideAnimationDelay = .3;
 
 /*
@@ -135,10 +139,14 @@ const addControls = function( controlCount ) {
     return controlWrapper;
 };
 
+/*
+ * @function: Main function for generating slider
+ */
 const generateSlider = function() {
     let previewTextarea = document.querySelector( '.ss-gen__preview-code textarea' ),
         styleStr = '';
 
+    // Set all dynamic values that are based on variables that draw from the inputs
     setDynamicStyleValues();
 
     // Generate the standard styles using an object that represents CSS with class names as properties defined before this file.
@@ -160,9 +168,13 @@ const generateSlider = function() {
                                 + document.querySelector( '.ss-gen__preview-slider' ).innerHTML.trim();
 };
 
+/*
+ * @function: Function for setting all styles of slider that are dynamic
+ */
 const setDynamicStyleValues = function() {
     let numSlides = slideObjs.length;
 
+    // Make sure animation style values are set
     setAnimationLength( numSlides );
 
     // Set slide widths based on # of slides
@@ -172,135 +184,185 @@ const setDynamicStyleValues = function() {
     // Set control width based on # of controls
     defaultStyles[ '~simple-slider__control' ].width = ( 40 + 15 * numSlides ) + 'px';
 
+    // Generate and set all animation keyframe objects
     animationStyles[ '@keyframes slide-animation' ] = createAnimationDefinition( numSlides, true, 'margin-left' );
     animationStyles[ '@keyframes control-animation' ] = createAnimationDefinition( numSlides, false, 'margin-left' );
     animationStyles[ '@keyframes text-animation' ] = createTextAnimation();
 };
 
+/*
+ * @function: Function for setting the values of the animation styles
+ */
 const setAnimationLength = function( numSlides ) {
     defaultStyles[ '~simple-slider__slides' ].animation = 'slide-animation ' + ( timePerSlide * numSlides )  + 's infinite';
     defaultStyles[ '~simple-slider__control--on' ].animation = 'control-animation ' + ( timePerSlide * numSlides )  + 's infinite';
     defaultStyles[ '~simple-slider__text' ].animation = 'text-animation ' + timePerSlide  + 's infinite';
 };
 
+/*
+ * @function: Function for generating an individual animation definition used for the animation keyframe objects
+ */
 const createAnimationDefinition = function( numSlides, isSlide, propertyName ) {
+        // divide the percent of time spent on each animation equally
     let percentIncrement = 100 / numSlides,
         // This is a doozy. This percent of the total slide animation time that one slide animation is supposed to take.
         // So for example, if there are 4 slides where each is active for 7 seconds, then the total slide animation time
         // is 28 seconds. If we have a slide animation length of 1 second, then the animation should take (1/28) * 100 ~ 3.57%
         animationOffset = ( slideAnimationLength / ( timePerSlide * numSlides ) ) * 100,
+        // increment (in px) used to move the control around. Currently it is fixed
         controlIncrement = 15,
-        animationObj = { '0%': {} };
+        animationObj = { '0%, 100%': {} };
 
-    animationObj[ '0%' ][ propertyName ] = '0';
+    // Always start and end the animations at zero
+    animationObj[ '0%, 100%' ][ propertyName ] = '0';
 
+    // For each slide, generate an animation for the slide or control
     for( let i = 1; i < numSlides; i++ ) {
         let currentPercent = ( i * percentIncrement ),
             transitionPercent = ( currentPercent - animationOffset ) + '%';
 
         currentPercent += '%';
 
+        // Initialize object for the percent that represents the start of the transition
         animationObj[ transitionPercent ] = {};
+        
         if( i === 1 ) {
+            // Make sure the first animation percent's initial value is zero
             animationObj[ transitionPercent ][ propertyName ] = '0';
         } else {
             if( isSlide ) {
+                // For slide animation. Example value: "-200%"
                 animationObj[ transitionPercent ][ propertyName ] = '-' + ( 100 * ( i - 1 ) ) + '%';
             } else {
+                // For control animation. Example value: "-35px"
                 animationObj[ transitionPercent ][ propertyName ] = ( controlIncrement * ( i - 1 ) ) + 'px';
             }
         }
         
+        // Initialize object for the percent that represents the end of the transition
         animationObj[ currentPercent ] = {};
+
         if( isSlide ) {
+            // For slide animation. Example value: "-300%"
             animationObj[ currentPercent ][ propertyName ] = '-' + ( 100 * i ) + '%';
         } else {
+            // For control animation. Example value: "-45px"
             animationObj[ currentPercent ][ propertyName ] = ( controlIncrement * i ) + 'px';
         }
     }
 
+    // Initialize one final transition object
     animationObj[ ( 100 - animationOffset ) + '%' ] = {};
+
     if( isSlide ) {
         animationObj[ ( 100 - animationOffset ) + '%' ][ propertyName ] = '-' + ( 100 * ( numSlides - 1 ) ) + '%';
     } else {
         animationObj[ ( 100 - animationOffset ) + '%' ][ propertyName ] = ( controlIncrement * ( numSlides - 1 ) ) + 'px';
     }
 
-    animationObj[ '100%' ] = {};
-    animationObj[ '100%' ][ propertyName ] = '0';
-
     return animationObj;
 };
 
+/*
+ * @function: Function for generating an the text animation definition used for the text animation keyframe object
+ */
 const createTextAnimation = function() {
         // Percentage of the entire slide's time that the text animates. So if the text animates in .7 seconds and
         // the time per slide is 7 seconds, then the text slide in animation must be complete at 10%
     let textAnimationPercent = ( textAnimationLength / timePerSlide ) * 100,
         // Percentage at which the text animation must end (where text is all the way off the screen) relative to the total slide time.
         textAnimationEndPercent = ( ( timePerSlide - textSlideAnimationDelay - slideAnimationLength ) / timePerSlide ) * 100,
+        // The left value for the text to animate off the screen. Currently a fixed value.
         animationLeftValue = '-520px',
         textAnimation = {
             '0%, 100%': {}
         };
 
+        // This is to make sure the text starts and ends of the screen (since that is when the slide transitions)
         textAnimation[ '0%, 100%' ].left = animationLeftValue;
 
+        // This is what causes the text to animate in
         textAnimation[ ( textAnimationPercent + '%' ) ] = {};
         textAnimation[ ( textAnimationPercent + '%' ) ].left = '0';
 
+        // This is what causes the text to stay on the screen until we want the animation out to start
         textAnimation[ ( ( textAnimationEndPercent - textAnimationPercent ) + '%' ) ] = {};
         textAnimation[ ( ( textAnimationEndPercent - textAnimationPercent ) + '%' ) ].left = '0';
 
+        // This will cause the text to animation out
         textAnimation[ ( textAnimationEndPercent + '%' ) ] = {};
         textAnimation[ ( textAnimationEndPercent + '%' ) ].left = animationLeftValue;
 
     return textAnimation;
 };
 
+/*
+ * @function: Helper function for setting the dialog text and showing the dialog (by adding the show dialog class from the body)
+ */
 const warningDialog = function( dialogText ) {
     document.querySelector( '.ss-gen__warning-dialog-text' ).innerText = dialogText;
 
     document.body.classList.add( 'show-warning-dialog' );
 };
 
+/*
+ * @function: Helper function for closing the dialog (by removing the show dialog class from the body)
+ */
 const closeWarningDialog = function() {
     document.body.classList.remove( 'show-warning-dialog' );
 };
 
 // Event Bindings
+/*
+ * @function: Event binding for the add slide button
+ */
 document.querySelector( '.ss-gen__add-slide-control' ).addEventListener( 'click', function( ev ) {
+    // Don't allow more than 10 slides for now
     if( slideObjs.length < 10 ) {
+        // Push generic slide object onto slide array. This is static for now
         slideObjs.push( {
             'headerText': 'Some header text',
             'bodyText': 'This is a short description of nothing. This text really has no purpose other than to occupy space. This space must be occupied to showcase the slider.',
             'imgLink': 'https://cdn.pixabay.com/photo/2018/05/13/21/55/water-3398111_1280.jpg'
         } );
 
+        // After slide is added, regenerate slider
         generateSlider();
     } else {
+        // Warn the user that they can no longer add slides
         warningDialog( 'Can\'t add more than 10 slides' );
     }
 } );
 
+/*
+ * @function: Event binding for the generate slideshow button
+ */
 document.querySelector( '.ss-gen__generate-slideshow' ).addEventListener( 'click', function( ev ) {
+    // Extract the values from the inputs
     var timePerSlideVal = +document.querySelector( '.ss-gen__time-per-slide' ).value,
         slideAnimationLengthVal = +document.querySelector( '.ss-gen__animation-length--slide' ).value,
         textAnimationLengthVal = +document.querySelector( '.ss-gen__animation-length--text' ).value,
         animationDelayVal = +document.querySelector( '.ss-gen__animation-delay' ).value;
 
-    if( timePerSlideVal <  ( slideAnimationLengthVal + 2 * textAnimationLengthVal + animationDelayVal ) ) {
+    // Validate the inputs, if they are incorrect, show the dialog
+    if( timePerSlideVal < ( slideAnimationLengthVal + 2 * textAnimationLengthVal + animationDelayVal ) ) {
         warningDialog( 'Time Per Slide cannot be less than slide animation + 2 x text animation + animation delay' );
+    // Else the inputs are correct so set the global variables and generate the slider
     } else {
+        // Set global variables using input data
         timePerSlide = timePerSlideVal;
         slideAnimationLength = slideAnimationLengthVal;
         textAnimationLength = textAnimationLengthVal;
         textSlideAnimationDelay = animationDelayVal;
-    }   
 
-    generateSlider();
+        // Generate slider
+        generateSlider();
+    }     
 } );
 
+// Bind dialog overlay and dialog close button to close dialog function
 document.querySelector( '.ss-gen__warning-dialog-overlay' ).addEventListener( 'click', closeWarningDialog );
 document.querySelector( '.ss-gen__warning-dialog-button' ).addEventListener( 'click', closeWarningDialog );
 
+// Intialize the slider
 generateSlider();
