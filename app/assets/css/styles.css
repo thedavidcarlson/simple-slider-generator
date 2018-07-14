@@ -2,6 +2,15 @@ body {
 	color: #333;
 }
 
+button {
+    background-color: #000;
+    border: 0;
+    color: #fff;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
 .ss-gen__container {
     padding: 30px;
     margin: 0 auto;
