@@ -334,6 +334,19 @@ document.querySelector( '.ss-gen__add-slide-control' ).addEventListener( 'click'
     }
 } );
 
+document.querySelector( '.ss-gen__add-content' ).addEventListener( 'click', function( ev ) {
+    var headerText = document.querySelector( '.ss-gen__slide-text--header' ).value,
+        bodyText = document.querySelector( '.ss-gen__slide-text--body' ).value,
+        imgLink = document.querySelector( '.ss-gen__slide-image' ).value;
+
+    slideObjs[ 0 ].headerText = headerText;
+    slideObjs[ 0 ].bodyText = bodyText;
+    slideObjs[ 0 ].imgLink = imgLink;
+
+    generateSlider();
+        
+} );
+
 /*
  * @function: Event binding for the generate slideshow button
  */

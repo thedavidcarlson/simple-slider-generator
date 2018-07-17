@@ -2,6 +2,11 @@ body {
 	color: #333;
 }
 
+input,
+textarea {
+    width: 100%;
+}
+
 button {
     background-color: #000;
     border: 0;
@@ -19,6 +24,10 @@ button {
 
 .ss-gen__controls {
     margin-bottom: 20px; 
+}
+
+.ss-gen__add-content {
+    margin-top: 10px;
 }
 
 .ss-gen__animation-note {
