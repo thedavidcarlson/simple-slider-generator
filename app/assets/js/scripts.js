@@ -312,19 +312,39 @@ const closeWarningDialog = function() {
     document.body.classList.remove( 'show-warning-dialog' );
 };
 
+const setSlideContentToInputs = function( slideNum, buttonContainer ) {
+    buttonContainer.setAttribute( 'data-selected-slide-index', slideNum );
+
+    document.querySelector( '.ss-gen__slide-text--header' ).value = slideObjs[ slideNum ].headerText;
+    document.querySelector( '.ss-gen__slide-text--body' ).value = slideObjs[ slideNum ].bodyText;
+    document.querySelector( '.ss-gen__slide-image' ).value = slideObjs[ slideNum ].imgLink;   
+};
+
 // Event Bindings
 /*
  * @function: Event binding for the add slide button
  */
 document.querySelector( '.ss-gen__add-slide-control' ).addEventListener( 'click', function( ev ) {
+    let numSlides = slideObjs.length;
+
     // Don't allow more than 10 slides for now
-    if( slideObjs.length < 10 ) {
+    if( numSlides < 10 ) {
         // Push generic slide object onto slide array. This is static for now
         slideObjs.push( {
             'headerText': 'Some header text',
             'bodyText': 'This is a short description of nothing. This text really has no purpose other than to occupy space. This space must be occupied to showcase the slider.',
             'imgLink': 'https://cdn.pixabay.com/photo/2018/05/13/21/55/water-3398111_1280.jpg'
         } );
+
+        let slideButtons = document.querySelector( '.ss-gen__slide-buttons' ),
+            newButton = document.querySelector( '.ss-gen__slide-button' ).cloneNode();
+
+        newButton.setAttribute( 'data-slide-index', numSlides );
+        newButton.innerText = 'Slide ' + ( numSlides + 1 );
+
+        slideButtons.appendChild( newButton );
+
+        setSlideContentToInputs( numSlides, slideButtons );
 
         // After slide is added, regenerate slider
         generateSlider();
@@ -334,14 +354,25 @@ document.querySelector( '.ss-gen__add-slide-control' ).addEventListener( 'click'
     }
 } );
 
-document.querySelector( '.ss-gen__add-content' ).addEventListener( 'click', function( ev ) {
-    var headerText = document.querySelector( '.ss-gen__slide-text--header' ).value,
-        bodyText = document.querySelector( '.ss-gen__slide-text--body' ).value,
-        imgLink = document.querySelector( '.ss-gen__slide-image' ).value;
+document.querySelector( '.ss-gen__slide-buttons' ).addEventListener( 'click', function( ev ) {
+    let clickedEl = ev.target;
 
-    slideObjs[ 0 ].headerText = headerText;
-    slideObjs[ 0 ].bodyText = bodyText;
-    slideObjs[ 0 ].imgLink = imgLink;
+    if( clickedEl && clickedEl.classList.contains( 'ss-gen__slide-button' ) ) {
+        let slideNum = clickedEl.getAttribute( 'data-slide-index' );
+
+        setSlideContentToInputs( slideNum, ev.currentTarget );
+    }
+} );
+
+document.querySelector( '.ss-gen__add-content' ).addEventListener( 'click', function( ev ) {
+    let headerText = document.querySelector( '.ss-gen__slide-text--header' ).value,
+        bodyText = document.querySelector( '.ss-gen__slide-text--body' ).value,
+        imgLink = document.querySelector( '.ss-gen__slide-image' ).value,
+        selectedSlideIndex = document.querySelector( '.ss-gen__slide-buttons' ).getAttribute( 'data-selected-slide-index' );
+
+    slideObjs[ selectedSlideIndex ].headerText = headerText;
+    slideObjs[ selectedSlideIndex ].bodyText = bodyText;
+    slideObjs[ selectedSlideIndex ].imgLink = imgLink;
 
     generateSlider();
         
@@ -352,7 +383,7 @@ document.querySelector( '.ss-gen__add-content' ).addEventListener( 'click', func
  */
 document.querySelector( '.ss-gen__generate-slideshow' ).addEventListener( 'click', function( ev ) {
     // Extract the values from the inputs
-    var timePerSlideVal = +document.querySelector( '.ss-gen__time-per-slide' ).value,
+    let timePerSlideVal = +document.querySelector( '.ss-gen__time-per-slide' ).value,
         slideAnimationLengthVal = +document.querySelector( '.ss-gen__animation-length--slide' ).value,
         textAnimationLengthVal = +document.querySelector( '.ss-gen__animation-length--text' ).value,
         animationDelayVal = +document.querySelector( '.ss-gen__animation-delay' ).value;

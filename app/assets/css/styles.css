@@ -26,6 +26,27 @@ button {
     margin-bottom: 20px; 
 }
 
+.ss-gen__slide-buttons {
+    margin-top: 10px;
+}
+
+.ss-gen__slide-button {
+    margin: 0 5px;
+}
+
+[data-selected-slide-index="0"] [data-slide-index="0"],
+[data-selected-slide-index="1"] [data-slide-index="1"],
+[data-selected-slide-index="2"] [data-slide-index="2"],
+[data-selected-slide-index="3"] [data-slide-index="3"],
+[data-selected-slide-index="4"] [data-slide-index="4"],
+[data-selected-slide-index="5"] [data-slide-index="5"],
+[data-selected-slide-index="6"] [data-slide-index="6"],
+[data-selected-slide-index="7"] [data-slide-index="7"],
+[data-selected-slide-index="8"] [data-slide-index="8"],
+[data-selected-slide-index="9"] [data-slide-index="9"] {
+    background-color: #a0a0a0;
+}
+
 .ss-gen__add-content {
     margin-top: 10px;
 }
