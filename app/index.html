@@ -10,36 +10,42 @@
         <div class="ss-gen__container">
             <h1 class="ss-gen__header">Simple Slider Generator</h1>
             <div class="ss-gen__controls">
-                <button class="ss-gen__add-slide-control">
-                    Add Slide
-                </button>
-                <div class="ss-gen__slide-buttons" data-selected-slide-index="0">
-                    <button class="ss-gen__slide-button" data-slide-index="0">Slide 1</button>
-                    <button class="ss-gen__slide-button" data-slide-index="1">Slide 2</button>
-                    <button class="ss-gen__slide-button" data-slide-index="2">Slide 3</button>
-                    <button class="ss-gen__slide-button" data-slide-index="3">Slide 4</button>
+                <div class="ss-gen__control-section ss-gen__control-section--content">
+                    <h3 class="ss-gen__sub-header">Content Controls</h3>
+                    <button class="ss-gen__add-slide-control">
+                        Add Slide
+                    </button>
+                    <div class="ss-gen__slide-buttons" data-selected-slide-index="0">
+                        <button class="ss-gen__slide-button" data-slide-index="0">Slide 1</button>
+                        <button class="ss-gen__slide-button" data-slide-index="1">Slide 2</button>
+                        <button class="ss-gen__slide-button" data-slide-index="2">Slide 3</button>
+                        <button class="ss-gen__slide-button" data-slide-index="3">Slide 4</button>
+                    </div>
+                    <label for="slider-header-text">Slide Header</label>
+                    <input type="text" name="slide-header-text" value="Some header text" class="ss-gen__slide-text--header"/>
+                    <label for="slide-body-text">Slide Paragraph</label>
+                    <textarea name="slide-body-text" class="ss-gen__slide-text--body">This is a short description of nothing. This text really has no purpose other than to occupy space. This space must be occupied to showcase the slider.</textarea>
+                    <label for="slide-image">Slide Background URL</label>
+                    <input type="text" name="slide-image" value="https://cdn.pixabay.com/photo/2018/05/13/21/55/water-3398111_1280.jpg" class="ss-gen__slide-image"/>
+                    <button class="ss-gen__add-content">
+                        Set Content
+                    </button>
                 </div>
-                <label for="slider-header-text">Slide Header</label>
-                <input type="text" name="slide-header-text" value="Some header text" class="ss-gen__slide-text--header"/>
-                <label for="slide-body-text">Slide Paragraph</label>
-                <textarea name="slide-body-text" class="ss-gen__slide-text--body">This is a short description of nothing. This text really has no purpose other than to occupy space. This space must be occupied to showcase the slider.</textarea>
-                <label for="slide-image">Slide Background URL</label>
-                <input type="text" name="slide-image" value="https://cdn.pixabay.com/photo/2018/05/13/21/55/water-3398111_1280.jpg" class="ss-gen__slide-image"/>
-                <button class="ss-gen__add-content">
-                    Add Content
-                </button>
-                <div class="ss-gen__animation-note">NOTE: In order to generate a slide show, the following must hold true. Total Time Per Slide must be greater than or equal to slide animation plus 2x text animation plus text/slide animation delay.</div>
-                <label for="total-slide-time">Total Time Per Slide</label>
-                <input type="number" name="total-slide-time" min="1" value="7" class="ss-gen__time-per-slide"/>
-                <label for="slide-animation-length">Slide Animation Length</label>
-                <input type="number" name="slide-animation-length" min="0" step=".1" value="1.5" class="ss-gen__animation-length--slide"/>
-                <label for="text-animation-length">Text Animation Length</label>
-                <input type="number" name="text-animation-length" min="0" step=".1" value=".7" class="ss-gen__animation-length--text"/>
-                <label for="text-animation-length">Text/Slide Animation Delay</label>
-                <input type="number" name="animation-delay" min="0" step=".1" value=".3" class="ss-gen__animation-delay"/>
-                <button class="ss-gen__generate-slideshow">
-                    Generate Slideshow
-                </button>
+                <div class="ss-gen__control-section ss-gen__control-section--animation">
+                    <h3 class="ss-gen__sub-header">Animation Controls</h3>
+                    <div class="ss-gen__animation-note">NOTE: In order to generate a slide show, the following must hold true. Total Time Per Slide must be greater than or equal to slide animation plus 2x text animation plus text/slide animation delay.</div>
+                    <label for="total-slide-time">Total Time Per Slide</label>
+                    <input type="number" name="total-slide-time" min="1" value="7" class="ss-gen__time-per-slide"/>
+                    <label for="slide-animation-length">Slide Animation Length</label>
+                    <input type="number" name="slide-animation-length" min="0" step=".1" value="1.5" class="ss-gen__animation-length--slide"/>
+                    <label for="text-animation-length">Text Animation Length</label>
+                    <input type="number" name="text-animation-length" min="0" step=".1" value=".7" class="ss-gen__animation-length--text"/>
+                    <label for="text-animation-length">Text/Slide Animation Delay</label>
+                    <input type="number" name="animation-delay" min="0" step=".1" value=".3" class="ss-gen__animation-delay"/>
+                    <button class="ss-gen__generate-slideshow">
+                        Set Animation
+                    </button>
+                </div>
             </div>
             <div class="ss-gen__preview">
                 <div class="ss-gen__preview-code">
