@@ -364,7 +364,7 @@ document.querySelector( '.ss-gen__slide-buttons' ).addEventListener( 'click', fu
     }
 } );
 
-document.querySelector( '.ss-gen__add-content' ).addEventListener( 'click', function( ev ) {
+document.querySelector( '.ss-gen__set-content' ).addEventListener( 'click', function( ev ) {
     let headerText = document.querySelector( '.ss-gen__slide-text--header' ).value,
         bodyText = document.querySelector( '.ss-gen__slide-text--body' ).value,
         imgLink = document.querySelector( '.ss-gen__slide-image' ).value,
@@ -381,16 +381,27 @@ document.querySelector( '.ss-gen__add-content' ).addEventListener( 'click', func
 /*
  * @function: Event binding for the generate slideshow button
  */
-document.querySelector( '.ss-gen__generate-slideshow' ).addEventListener( 'click', function( ev ) {
+document.querySelector( '.ss-gen__set-animation' ).addEventListener( 'click', function( ev ) {
     // Extract the values from the inputs
-    let timePerSlideVal = +document.querySelector( '.ss-gen__time-per-slide' ).value,
-        slideAnimationLengthVal = +document.querySelector( '.ss-gen__animation-length--slide' ).value,
-        textAnimationLengthVal = +document.querySelector( '.ss-gen__animation-length--text' ).value,
-        animationDelayVal = +document.querySelector( '.ss-gen__animation-delay' ).value;
+    let timePerSlideControl = document.querySelector( '.ss-gen__time-per-slide' ),
+        slideAnimationLengthControl = document.querySelector( '.ss-gen__animation-length--slide' ),
+        textAnimationLengthControl = document.querySelector( '.ss-gen__animation-length--text' ),
+        animationDelayControl = document.querySelector( '.ss-gen__animation-delay' ),
+        timePerSlideVal = +timePerSlideControl.value,
+        slideAnimationLengthVal = +slideAnimationLengthControl.value,
+        textAnimationLengthVal = +textAnimationLengthControl.value,
+        animationDelayVal = +animationDelayControl.value;
 
     // Validate the inputs, if they are incorrect, show the dialog
     if( timePerSlideVal < ( slideAnimationLengthVal + 2 * textAnimationLengthVal + animationDelayVal ) ) {
         warningDialog( 'Time Per Slide cannot be less than slide animation + 2 x text animation + animation delay' );
+
+        // @TODO: Move these to a special "reset" button in dialog
+        // Reset Values
+        timePerSlideControl.value = timePerSlide;
+        slideAnimationLengthControl.value = slideAnimationLength;
+        textAnimationLengthControl.value = textAnimationLength;
+        animationDelayControl.value = textSlideAnimationDelay;
     // Else the inputs are correct so set the global variables and generate the slider
     } else {
         // Set global variables using input data
