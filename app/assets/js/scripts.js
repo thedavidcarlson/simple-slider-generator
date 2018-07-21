@@ -364,6 +364,29 @@ document.querySelector( '.ss-gen__slide-buttons' ).addEventListener( 'click', fu
     }
 } );
 
+document.querySelector( '.ss-gen__delete-slide-control' ).addEventListener( 'click', function( ev ) {
+    let numSlides = slideObjs.length;
+    if( numSlides > 2 ) {
+        let currentSlideIndex = +document.querySelector( '.ss-gen__slide-buttons' ).getAttribute( 'data-selected-slide-index' );
+
+        slideObjs.splice( currentSlideIndex, 1 );
+
+        let slideButtons = document.querySelectorAll( '.ss-gen__slide-button' );
+
+        slideButtons[ slideButtons.length - 1 ].outerHTML = '';
+
+        if( numSlides - 1 === currentSlideIndex ) {
+            slideButtons[ currentSlideIndex - 1 ].click();
+        } else {
+            document.querySelector( '.ss-gen__slide-text--header' ).value = slideObjs[ currentSlideIndex ].headerText;
+            document.querySelector( '.ss-gen__slide-text--body' ).value = slideObjs[ currentSlideIndex ].bodyText;
+            document.querySelector( '.ss-gen__slide-image' ).value = slideObjs[ currentSlideIndex ].imgLink;
+        }
+
+        generateSlider();
+    }
+} );
+
 document.querySelector( '.ss-gen__set-content' ).addEventListener( 'click', function( ev ) {
     let headerText = document.querySelector( '.ss-gen__slide-text--header' ).value,
         bodyText = document.querySelector( '.ss-gen__slide-text--body' ).value,

@@ -68,6 +68,12 @@ body {
     min-height: 50px;
 }
 
+.ss-gen__current-slide-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
 [data-selected-slide-index="0"] [data-slide-index="0"],
 [data-selected-slide-index="1"] [data-slide-index="1"],
 [data-selected-slide-index="2"] [data-slide-index="2"],

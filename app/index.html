@@ -13,14 +13,23 @@
                 <div class="ss-gen__control-section ss-gen__control-section--content">
                     <h3 class="ss-gen__sub-header">Content Controls</h3>
                     <button class="ss-gen__add-slide-control">
-                        Add Slide
+                        Add New Slide
                     </button>
-                    <div class="ss-gen__slide-buttons" data-selected-slide-index="0">
-                        <button class="ss-gen__slide-button" data-slide-index="0">Slide 1</button>
-                        <button class="ss-gen__slide-button" data-slide-index="1">Slide 2</button>
-                        <button class="ss-gen__slide-button" data-slide-index="2">Slide 3</button>
-                        <button class="ss-gen__slide-button" data-slide-index="3">Slide 4</button>
+                    <div class="ss-gen__current-slide-controls">
+                        <div class="ss-gen__current-slide-buttons">
+                            <label>Current Slide</label>
+                            <div class="ss-gen__slide-buttons" data-selected-slide-index="0">
+                                <button class="ss-gen__slide-button" data-slide-index="0">Slide 1</button>
+                                <button class="ss-gen__slide-button" data-slide-index="1">Slide 2</button>
+                                <button class="ss-gen__slide-button" data-slide-index="2">Slide 3</button>
+                                <button class="ss-gen__slide-button" data-slide-index="3">Slide 4</button>
+                            </div>
+                        </div>
+                        <button class="ss-gen__delete-slide-control">
+                            Delete Current Slide
+                        </button>
                     </div>
+                    
                     <label for="slider-header-text">Slide Header</label>
                     <input type="text" name="slide-header-text" value="Some header text" class="ss-gen__slide-text--header"/>
                     <label for="slide-body-text">Slide Paragraph</label>
