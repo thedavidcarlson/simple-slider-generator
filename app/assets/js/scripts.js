@@ -384,6 +384,8 @@ document.querySelector( '.ss-gen__delete-slide-control' ).addEventListener( 'cli
         }
 
         generateSlider();
+    } else {
+        warningDialog( 'Must have at least 2 slides.' );
     }
 } );
 
