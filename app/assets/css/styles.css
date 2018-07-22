@@ -30,6 +30,10 @@ body {
     display: block;
 }
 
+.ss-gen__control-section button:hover {
+    background-color: #333;
+}
+
 .ss-gen__slide-buttons {
     display: inline-flex;
     flex-wrap: wrap;
@@ -45,6 +49,10 @@ body {
     border: 1px solid #000;
     border-right-width: 0;
     outline: 0;
+}
+
+.ss-gen__slide-buttons .ss-gen__slide-button:hover {
+    background-color: #ccc;
 }
 
 .ss-gen__slide-button:last-of-type {
